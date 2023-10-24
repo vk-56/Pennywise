@@ -6,6 +6,11 @@ import { useNavigate } from "react-router-dom"
 import React, { useEffect, useState } from "react";
 import EarthCanvas from "./Earth";
 import axios from "axios"
+/* For form input validation */
+import * as yup from 'yup'
+import { useForm } from "react-hook-form"
+/* Integrating schema with useForm hook */
+import { yupResolver } from "@hookform/resolvers/yup"
 
 
 export function Login() {
@@ -13,6 +18,34 @@ export function Login() {
   const navigate = useNavigate()
 
   function handleLogin() {
+    console.log(data)
+    setIsAuth(true)
+    navigate("/")
+  }
+
+  /* Schema of form */
+  const schema = yup.object().shape({
+    email: yup.string().required(),
+    password: yup.string().required()
+  })
+
+  /* Functions from useForm hook */
+  const { register, handleSubmit, setValue, formState: {errors} } = useForm({
+    mode: "onChange",
+    resolver: yupResolver(schema),
+  })
+
+  /* Adding submitted data to database */
+  const onSubmit = async (data) => {
+    const response = await fetch('http://localhost:8080/api/v1/users', {
+      method: 'POST',
+      headers: { 'Content-Type' : 'application/json'},
+      body: JSON.stringify({
+        email: data.email,
+        password: data.password,
+      })
+    })
+    console.log(data);
     setIsAuth(true)
     navigate("/")
   }
@@ -29,19 +62,30 @@ export function Login() {
             <Typography color="green" className="mt-1 font-normal text-2xl flex items-center justify-center">
               Enter your details to login.
             </Typography>
-            <form className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96">
+            <form 
+              className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96"
+              onSubmit={handleSubmit(onSubmit)}
+            >
               <div className="mb-4 flex flex-col gap-6">
-                <Input size="lg" color="white" label="Email" />
-                {/* <Input size="lg" label="Email" /> */}
-                <Input type="password" color="white" size="lg" label="Password" />
+                <Input 
+                  {...register("email")}
+                  size="lg" 
+                  color="white" 
+                  label="Email" 
+                />
+                <Input {...register("password")}
+                  type="password" 
+                  color="white" 
+                  size="lg" 
+                  label="Password" 
+                />
               </div>
-
-              <Button className="mt-6 text-lg" fullWidth onClick={() => handleLogin()}>
+              <Button className="mt-6 text-lg" fullWidth type="submit">
                 Login
               </Button >
               <Typography color="gray" className="mt-4 text-center text-xl font-normal">
-                Create a new account?{" "}
-                <Button className="mt-6" fullWidth onClick={() => setIsNewUser(true)}>
+                Create a new account?
+                <Button className="mt-6" fullWidth type="submit">
                   <Typography color="green">Sign Up</Typography>
                 </Button >
               </Typography>
