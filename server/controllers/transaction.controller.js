@@ -1,4 +1,5 @@
 import Transaction from '../mongodb/models/transaction.js';
+import Budget from '../mongodb/models/budget.js';
 
 const createTransaction = async (req, res) => {
     try {
@@ -10,8 +11,17 @@ const createTransaction = async (req, res) => {
             date,
             userId
         })
-
         const transactionId = newTransaction._id;
+        /* update budget current amount based on user id and category of transaction */
+        const updateResult = await Budget.updateOne({
+            "category": category,
+            "userId": userId,
+        }, {
+            $inc: {
+                "currentAmount": amount
+            }
+        });
+        console.log('Update result:', updateResult);
         res.status(200).json({ message: transactionId });
     } catch (error) {
         console.error(error); // Log the error for debugging
