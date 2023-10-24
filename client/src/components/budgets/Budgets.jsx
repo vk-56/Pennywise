@@ -88,7 +88,7 @@ export function Budgets() {
                 <Card className="col-span-6 row-span-3 row-start-7 text-xl p-4 
                     text-off-white bg-navy-blue
                     hover:shadow-[4px_3px_2px_1px] hover:shadow-dark-green">
-                        <div className="flex flex-col justify-center items-center gap-4"> Edit Budgets</div>
+                        <div className="flex flex-col justify-center items-center gap-4"> Add a Budget</div>
                         <AddBudgets tableData={tableData} setTableData={setTableData} />
                 </Card>
             </div>

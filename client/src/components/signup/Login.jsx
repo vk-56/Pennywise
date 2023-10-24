@@ -3,9 +3,8 @@ import { AppContext } from "../../App"
 // import { Button } from "@material-tailwind/react"
 import { Card, Input, Checkbox, Button, Typography, } from "@material-tailwind/react";
 import { useNavigate } from "react-router-dom"
-import React, { useEffect, useState } from "react";
+import React from "react";
 import EarthCanvas from "./Earth";
-import axios from "axios"
 /* For form input validation */
 import * as yup from 'yup'
 import { useForm } from "react-hook-form"
@@ -14,14 +13,8 @@ import { yupResolver } from "@hookform/resolvers/yup"
 
 
 export function Login() {
-  const { setIsAuth, setIsNewUser } = useContext(AppContext)
+  const { setIsAuth, setIsNewUser, userId, setUserId } = useContext(AppContext)
   const navigate = useNavigate()
-
-  function handleLogin() {
-    console.log(data)
-    setIsAuth(true)
-    navigate("/")
-  }
 
   /* Schema of form */
   const schema = yup.object().shape({
@@ -38,20 +31,22 @@ export function Login() {
   /* Adding submitted data to database */
   const onSubmit = async (data) => {
     try {
-      const response = await fetch('http://localhost:8080/api/v1/users', {
+      const response = await fetch('http://localhost:8080/api/v1/users/login', 
+      {
         method: 'POST',
         headers: { 'Content-Type' : 'application/json'},
         body: JSON.stringify({
-          userName: '',
           email: data.email,
           password: data.password,
-          avatar: '',
-          coinBalance: 0,
         })
       })
-      console.log(response.status); // HTTP status code
-      console.log(response.statusText); // Status text (e.g., "Internal Server Error")
-      console.log(await response.text()); // Response body (if available)
+    
+      if (response.status === 200) {
+        const responseData = await response.json();
+        setUserId(responseData.message);
+      } else {
+        console.error('User login failed');
+      }
     } catch (error) {
       console.log(error);
     }
@@ -94,7 +89,7 @@ export function Login() {
               </Button >
               <Typography color="gray" className="mt-4 text-center text-xl font-normal">
                 Create a new account?
-                <Button className="mt-6" fullWidth>
+                <Button className="mt-6" fullWidth onClick={() => setIsNewUser(true)}>
                   <Typography color="green">Sign Up</Typography>
                 </Button >
               </Typography>

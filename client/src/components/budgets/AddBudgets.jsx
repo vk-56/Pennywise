@@ -1,5 +1,5 @@
 import { Button, Input, Select, Option } from "@material-tailwind/react"
-import { Alert } from "@material-tailwind/react"
+import { Alert, Textarea } from "@material-tailwind/react"
 import { useState } from "react"
 /* For form input validation */
 import * as yup from 'yup'
@@ -14,7 +14,7 @@ export function AddBudgets(props) {
     /* Schema of form */
     const schema = yup.object().shape({
         type: yup.string(),
-        category: yup.string(),
+        description: yup.string(),
         amount: yup.number(),
     })
 
@@ -28,7 +28,7 @@ export function AddBudgets(props) {
     const onSubmit = (data) => {
         props.setTableData([...props.tableData,{
             category: data.category,
-            type: data.type,
+            description: data.description,
             amount: `Rs. ${data.amount}`,
             date: new Date().toDateString(),
         }])
@@ -40,24 +40,6 @@ export function AddBudgets(props) {
             onSubmit={handleSubmit(onSubmit)}
         >
             <div className="flex justify-center items-center gap-8">
-                <div className="basis-1/6">
-                    <Select
-                        {...register("type")}
-                        onChange={(e) => setValue('type', e, { shouldValidate: true })}
-                        label="Select Type" 
-                        className="w-full font-main font-normal text-emerald"
-                        color="green"
-                        menuProps={{
-                            className: 'bg-navy-blue text-emerald'
-                        }}
-                        labelProps={{
-                            className: 'font-main font-bold'
-                        }}
-                    >
-                        <Option value="Income">Short Term</Option>
-                        <Option value="Expense">Long Term</Option>
-                    </Select>
-                </div>
                 <div className="basis-1/6">
                     <Select 
                         {...register("category")}
@@ -76,6 +58,18 @@ export function AddBudgets(props) {
                         <Option value="Transport">Transport</Option>
                         <Option value="Entertainment">Entertainment</Option>
                     </Select>
+                </div>
+                <div className="basis-1/6">
+                    <Textarea
+                        {...register("description")} 
+                        variant="outlined" 
+                        label="Enter description"
+                        className="w-full font-main font-normal text-emerald focus:shadow-none"
+                        color="green"
+                        labelProps={{
+                            className: 'font-main font-bold'
+                        }} 
+                    />
                 </div>
                 <div className="basis-1/6 flex flex-col justify-center">
                     <Input
