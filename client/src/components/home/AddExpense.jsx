@@ -1,15 +1,15 @@
 import { Button, Input, Select, Option } from "@material-tailwind/react"
 import { Alert } from "@material-tailwind/react"
-import { useState } from "react"
+import { useContext } from "react"
+import { AppContext } from "../../App"
 /* For form input validation */
 import * as yup from 'yup'
 import { useForm } from "react-hook-form"
 /* Integrating schema with useForm hook */
 import { yupResolver } from "@hookform/resolvers/yup"
 
-export function AddExpense(props) {
-    /* To notify user on button click */
-    const [ showAlert, setShowAlert ] = useState(false)
+export function AddExpense() {
+    const { userId, showAlert, setShowAlert } = useContext(AppContext); 
 
     /* Schema of form */
     const schema = yup.object().shape({
@@ -24,14 +24,30 @@ export function AddExpense(props) {
         resolver: yupResolver(schema),
     })
 
-    /* Adding submitted data to array */
-    const onSubmit = (data) => {
-        props.setTableData([...props.tableData,{
-            category: data.category,
-            type: data.type,
-            amount: `Rs. ${data.amount}`,
-            date: new Date().toDateString(),
-        }])
+    /* Adding submitted budget to database */
+    const onSubmit = async (data) => {
+        try {
+            const response = await fetch('http://localhost:8080/api/v1/transactions/createTransaction', {
+                method: 'POST',
+                headers: { 'Content-Type' : 'application/json'},
+                body: JSON.stringify({
+                    type: data.type,
+                    category: data.category,
+                    amount: data.amount,
+                    date: new Date().toDateString(),
+                    userId: userId
+                })
+            });
+            console.log('Transaction creation done')
+            if (response.status === 200) {
+                const responseData = await response.json();
+                console.log(responseData.message);
+            } else {
+                console.error('Transaction creation failed');
+            }
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     return(

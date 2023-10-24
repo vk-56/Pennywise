@@ -4,25 +4,39 @@ import { ExpensesChart } from "./ExpensesChart"
 import { DailyChallenges } from "./DailyChallenges"
 import { TransactionList } from "./TransactionList"
 import { AddExpense } from "./AddExpense"
-import { useState } from "react"
+import { useState, useContext, useEffect } from "react"
+import { AppContext } from "../../App"
 
 /* Parent Component for Home tab */
 
 export function Main() {
-    const [tableData, setTableData] = useState([
-        {
-            category: "Food",
-            type: "Expense",
-            amount: "Rs 1000",
-            date: "Thu Sep 24 2023"
-        },
-        {
-            category: "Transport",
-            type: "Expense",
-            amount: "Rs 200",
-            date: "Fri Sep 26 2023"
+    const { userId } = useContext(AppContext);
+    const [ userName, setUserName ] = useState('');
+
+    useEffect( () => {
+        async function fetchUserName() {
+            try {
+                const response = await fetch('http://localhost:8080/api/v1/users/getUsername', 
+                    {
+                    method: 'POST',
+                    headers: { 'Content-Type' : 'application/json'},
+                    body: JSON.stringify({
+                        userId: userId
+                    })
+                })
+            
+                if (response.status === 200) {
+                    const responseData = await response.json();
+                    setUserName(responseData.message);
+                } else {
+                    console.error('Username fetching failed');
+                }
+            } catch (error) {
+                console.log(error);
+            }
         }
-    ])
+        fetchUserName(); 
+    }, []);
 
     return(
         <main className= "bg-rich-black h-full">
@@ -37,7 +51,7 @@ export function Main() {
                     xl:row-span-2 overflow-scroll lg"
                 >
                     <Typography variant="h4" className="font-main flex items-center justify-center pt-6">
-                        Welcome, John!
+                        Welcome, {userName}
                     </Typography> 
                 </Card>
                 <Card
@@ -46,27 +60,19 @@ export function Main() {
                     hover:shadow-[4px_3px_2px_1px] hover:shadow-dark-green font-display overflow-scroll"
                 >
                     Add a Transaction
-                    <AddExpense tableData={tableData} setTableData={setTableData} />
-                </Card> 
-                <Card 
-                    className="text-xl p-4 text-off-white  bg-navy-blue
-                    xl:row-span-3 xl:row-start-3 transition-shadow duration-300
-                    hover:shadow-[4px_3px_2px_1px] hover:shadow-dark-green font-display overflow-scroll"
-                >
-                    Daily Expenses
-                    <ExpensesChart />
+                    <AddExpense />
                 </Card>
                 <Card 
                     className="text-xl text-off-white p-4 bg-navy-blue
-                    xl:row-span-2 xl:col-span-2 xl:row-start-3 transition-shadow duration-300
+                    xl:row-span-2 xl:col-span-3 xl:row-start-3 transition-shadow duration-300
                     hover:shadow-[4px_3px_2px_1px] hover:shadow-dark-green font-display overflow-scroll"
                 >
                     Recent Transactions
-                    <TransactionList tableData={tableData} />
+                    <TransactionList />
                 </Card>
                 <Card 
                     className="text-xl text-off-white p-4 bg-navy-blue
-                    xl:row-span-2 xl:col-start-1 xl:row-start-6 transition-shadow duration-300
+                    xl:row-span-3 xl:col-start-1 xl:row-start-5 transition-shadow duration-300
                     hover:shadow-[4px_3px_2px_1px] hover:shadow-dark-green font-display overflow-scroll"
                 >
                     <div>Know My City</div>

@@ -30,8 +30,7 @@ export function UserBudgets() {
                 console.log(error);
             }
         }
-        fetchUserBudgets();
-        console.log(showAlert);    
+        fetchUserBudgets(); 
     }, [showAlert]);
 
     if (!userBudgetsArray) return(<div className="flex flex-col justify-center items-center gap-4">Your Budgets</div>)
