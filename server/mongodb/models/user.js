@@ -1,10 +1,14 @@
 import mongoose from "mongoose";
 
 const UserSchema = new mongoose.Schema({
+    userName: { type: String, required: false},
     email: { type: String, required: true},
     password: { type: String, required: true},
-    allChallenges: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Challenge' }],
-    allBudgets: [{ type: mongoose.Schema.Types.ObjectId, red: 'Budget'}],
+    avatar: { type: String, required: false},
+    coinBalance: { type: Number, required: false},
+    dailyChallenges: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Challenge'}],
+    allBudgets: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Budget'}],
+    allTransactions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Transaction'}]
 })
 
 const userModel = mongoose.model('User', UserSchema);

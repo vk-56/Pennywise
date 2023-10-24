@@ -5,21 +5,26 @@ const getAllUsers = async (req, res) => {};
 const getUserInfoById = async (req, res) => {};
 const createUser = async (req, res) => {
     try {
-        const { email, password } = req.body;
+        const { userName, email, password, avatar, coinBalance } = req.body;
 
         const userExists = await User.findOne({ email });
 
         if(userExists) return res.status(200).json(userExists);
 
         const newUser = await User.create({
+            userName,
             email,
             password,
-            allChallenges: [],
+            avatar,
+            coinBalance, 
+            dailyChallenges: [],
             allBudgets: [],
+            allTransactions: [],
         })
         
         res.status(200).json(newUser);
     } catch (error) {
+        console.error(error); // Log the error for debugging
         res.status(500).json({ message: error.message })   
     }
 

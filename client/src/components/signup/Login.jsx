@@ -37,15 +37,24 @@ export function Login() {
 
   /* Adding submitted data to database */
   const onSubmit = async (data) => {
-    const response = await fetch('http://localhost:8080/api/v1/users', {
-      method: 'POST',
-      headers: { 'Content-Type' : 'application/json'},
-      body: JSON.stringify({
-        email: data.email,
-        password: data.password,
+    try {
+      const response = await fetch('http://localhost:8080/api/v1/users', {
+        method: 'POST',
+        headers: { 'Content-Type' : 'application/json'},
+        body: JSON.stringify({
+          userName: '',
+          email: data.email,
+          password: data.password,
+          avatar: '',
+          coinBalance: 0,
+        })
       })
-    })
-    console.log(data);
+      console.log(response.status); // HTTP status code
+      console.log(response.statusText); // Status text (e.g., "Internal Server Error")
+      console.log(await response.text()); // Response body (if available)
+    } catch (error) {
+      console.log(error);
+    }
     setIsAuth(true)
     navigate("/")
   }
@@ -85,7 +94,7 @@ export function Login() {
               </Button >
               <Typography color="gray" className="mt-4 text-center text-xl font-normal">
                 Create a new account?
-                <Button className="mt-6" fullWidth type="submit">
+                <Button className="mt-6" fullWidth>
                   <Typography color="green">Sign Up</Typography>
                 </Button >
               </Typography>
