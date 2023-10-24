@@ -3,7 +3,6 @@ import express from 'express';
 // Importing controllers
 import {
     getAllBudgets,
-    getBudgetDetail,
     createBudget,
     updateBudget,
     deleteBudget
@@ -11,9 +10,9 @@ import {
 
 const router = express.Router();
 
-router.route('/').get(getAllBudgets);
-router.route('/:id').get(getBudgetDetail);
-router.route('/').post(createBudget);
+router.route('/createBudget').post(createBudget);
+router.route('/getBudget').post(getAllBudgets);
+
 router.route('/').patch(updateBudget);
 router.route('/').delete(deleteBudget);
 

@@ -20,11 +20,15 @@ function App() {
   const [isNewUser, setIsNewUser] = useState(true)
 
   const [userId, setUserId] = useState('')
+
+  /* To notify user on button click */
+  const [ showAlert, setShowAlert ] = useState(false)
+
   /* Placeholder for Router components */
   const outlet = useOutlet()
 
   return (
-      <AppContext.Provider value = { { isMounted, setIsMounted, isAuth, setIsAuth, setIsNewUser, userId, setUserId }}>  
+      <AppContext.Provider value = { { isMounted, setIsMounted, isAuth, setIsAuth, setIsNewUser, userId, setUserId, showAlert, setShowAlert }}>  
         { isAuth ? ( 
             <div className='flex h-full w-full min-h-screen'>
               {isMounted && <Sidebar />}

@@ -1,21 +1,21 @@
 import { Button, Input, Select, Option } from "@material-tailwind/react"
 import { Alert, Textarea } from "@material-tailwind/react"
-import { useState } from "react"
+import { useContext, useState } from "react"
 /* For form input validation */
 import * as yup from 'yup'
 import { useForm } from "react-hook-form"
 /* Integrating schema with useForm hook */
 import { yupResolver } from "@hookform/resolvers/yup"
+import { AppContext } from "../../App"
 
-export function AddBudgets(props) {
-    /* To notify user on button click */
-    const [ showAlert, setShowAlert ] = useState(false)
+export function AddBudgets() {
+    const { userId, showAlert, setShowAlert } = useContext(AppContext); 
 
     /* Schema of form */
     const schema = yup.object().shape({
-        type: yup.string(),
-        description: yup.string(),
-        amount: yup.number(),
+        category: yup.string().required(),
+        description: yup.string().required(),
+        amount: yup.number().required(),
     })
 
     /* Functions from useForm hook */
@@ -24,14 +24,30 @@ export function AddBudgets(props) {
         resolver: yupResolver(schema),
     })
 
-    /* Adding submitted data to array */
-    const onSubmit = (data) => {
-        props.setTableData([...props.tableData,{
-            category: data.category,
-            description: data.description,
-            amount: `Rs. ${data.amount}`,
-            date: new Date().toDateString(),
-        }])
+    /* Adding submitted budget to database */
+    const onSubmit = async (data) => {
+        try {
+            const response = await fetch('http://localhost:8080/api/v1/budgets/createBudget', {
+                method: 'POST',
+                headers: { 'Content-Type' : 'application/json'},
+                body: JSON.stringify({
+                    category: data.category,
+                    description: data.description,
+                    currentAmount: 0,
+                    maxAmount: data.amount,
+                    userId: userId
+                })
+            });
+            console.log('Budget creation done')
+            if (response.status === 200) {
+                const responseData = await response.json();
+                console.log(responseData.message);
+            } else {
+                console.error('Budget creation failed');
+            }
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     return(
@@ -111,3 +127,78 @@ export function AddBudgets(props) {
         </form> 
     )
 }
+{/*
+import { ProgressBar } from '@tremor/react'
+import { useContext } from 'react'
+import { AppContext } from '../../App'
+
+export function UserBudgets() {
+    const colors = ["teal", "lime", "pink"]
+    const { userId } = useContext(AppContext);
+    const fetchUserBudgets =  async () => {
+        try {
+            const response = await fetch('http://localhost:8080/api/v1/budgets/getBudget', 
+                {
+                method: 'POST',
+                headers: { 'Content-Type' : 'application/json'},
+                body: JSON.stringify({
+                    userId: userId
+                })
+            })
+        
+            if (response.status === 200) {
+                const responseData = await response.json();
+                console.log(responseData.message);
+                return(responseData.message)
+            } else {
+                console.error('Budget fetching failed');
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const userBudgetsArray = fetchUserBudgets();
+    return(
+        <div className="flex flex-col justify-center items-center gap-4">
+                Your Budgets
+                {   Static Budgets
+                {props.budgetData.map( ({category, desc, amount, color}) => (
+                    <>
+                        <div 
+                            className=" w-4/5 font-normal text-lg font-main text-off-white mt-4
+                            flex justify-between"
+                        >
+                            <div>{category} &bull; {desc}</div>
+                            <div>&#8377; {amount}</div>
+                        </div>
+                        <ProgressBar 
+                            value={45} 
+                            color={color} 
+                            className="mt-3 w-4/5" 
+                            showAnimation={true} 
+                        />  
+                    </>
+                    )
+                )} }
+                {userBudgetsArray.map( ({category, description, currentAmount, maxAmount}) => {
+                   <>
+                        <div 
+                            className=" w-4/5 font-normal text-lg font-main text-off-white mt-4
+                            flex justify-between"
+                        >
+                            <div>{category} &bull; {description}</div>
+                            <div>&#8377; {currentAmount} / {maxAmount} </div>
+                        </div>
+                        <ProgressBar 
+                            value={(parseInt(currentAmount)/maxAmount * 100)} 
+                            color={colors[Math.floor(Math.random() * 2)]} 
+                            className="mt-3 w-4/5" 
+                            showAnimation={true} 
+                        />  
+                    </>
+                })} 
+        </div>
+    )
+}
+*/}
