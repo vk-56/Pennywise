@@ -46,6 +46,7 @@ export function SimpleRegistrationForm() {
           password: data.password,
           avatar: '',
           coinBalance: 0,
+          
         })
       });
 
