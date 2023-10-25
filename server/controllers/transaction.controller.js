@@ -32,19 +32,47 @@ const createTransaction = async (req, res) => {
 const getAllTransactions = async (req, res) => {
     try {   
         const { userId } = req.body;
-        const transactions = await Transaction.find({ userId: userId });
-        if(transactions) 
-            return res.status(200).json( { message: transactions } ) ;
-        else
-            return res.status(500).json( {message: 'No Budgets found'} )
-        
+        const transactions = await Transaction.find({ userId: userId })
+            .sort({ date: -1 })  // Sort by date in descending order (most recent first)
+            .limit(3);           // Limit the results to 3 transactions
+
+        if (transactions.length > 0) {
+            // Convert date strings to date objects
+            transactions.forEach(transaction => {
+                transaction.date = new Date(transaction.date);
+            });
+
+            return res.status(200).json({ message: transactions });
+        } else {
+            return res.status(200).json({ message: 'No recent transactions found' });
+        }
     } catch (error) {
         console.error(error); // Log the error for debugging
-        res.status(500).json({ message: error.message })  
+        res.status(500).json({ message: error.message });
+    }
+};
+
+const getAllTransactionsByMonth = async (req, res) => {
+    try {
+        const { userId } = req.body;
+        const octTransactions = await Transaction.find({
+            userId: userId,
+            date: /Oct/i, // Use a case-insensitive regular expression to match 'Oct' in the date field
+        }, 'date amount');
+
+        if (octTransactions.length > 0) {
+            return res.status(200).json({ message: octTransactions });
+        } else {
+            return res.status(200).json({ message: 'No transactions with "Oct" found' });
+        }
+    } catch (error) {
+        console.error(error); // Log the error for debugging
+        res.status(500).json({ message: error.message });
     }
 };
 
 export {
     createTransaction,
-    getAllTransactions
+    getAllTransactions,
+    getAllTransactionsByMonth
 }

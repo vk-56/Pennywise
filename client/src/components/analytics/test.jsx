@@ -7,7 +7,7 @@ const valueFormatter = (number) => `Rs. ${number}`
 
 export function DailyExpenseFlow() {
     const { userId } = useContext(AppContext);
-    const [chartData, setChartData] = useState();
+    let chartData = [];
 
     useEffect( () => {
         async function fetchDailyTransactions() {
@@ -25,22 +25,17 @@ export function DailyExpenseFlow() {
                     const responseData = await response.json();
                     console.log(responseData.message)
                     // Create the chart data
-                    const updatedChartData = responseData.message.map((item) => {
+                    const chartData = responseData.message.map((item) => {
                         // Extract the day and amount from the response data
                         const day = item.date.split(' ')[1] + ' ' + item.date.split(' ')[2];
                         const Expenditure = item.amount;
                     
-                        return { day, Expenditure };
+                        return { 
+                            day: day, 
+                            "Expenditure": Expenditure 
+                        };
                     });
-                    // Sort the data by day in ascending order
-                    updatedChartData.sort((a, b) => {
-                        // Parse the days as integers for comparison
-                        const dayA = parseInt(a.day.split(' ')[1]);
-                        const dayB = parseInt(b.day.split(' ')[1]);
-                        return dayA - dayB;
-                    });
-
-                    setChartData(updatedChartData);
+                    
                     console.log(chartData);
                 } else {
                     console.error('Oct transaction fetching failed');
