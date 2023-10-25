@@ -15,6 +15,7 @@ import { FaUserEdit as UserEdit } from 'react-icons/fa'
 import { FiPower as PowerOff } from 'react-icons/fi'
 import { Link } from 'react-router-dom'
 import { AppContext } from '../../App'
+import { useEffect } from "react"
 
 export function Profile() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -28,6 +29,33 @@ export function Profile() {
     };
 
     const { setIsAuth } = useContext(AppContext)
+    const { userId } = useContext(AppContext);
+    const [ userName, setUserName ] = useState('');
+
+    useEffect( () => {
+        async function fetchUserName() {
+            try {
+                const response = await fetch('http://localhost:8080/api/v1/users/getUsername', 
+                    {
+                    method: 'POST',
+                    headers: { 'Content-Type' : 'application/json'},
+                    body: JSON.stringify({
+                        userId: userId
+                    })
+                })
+            
+                if (response.status === 200) {
+                    const responseData = await response.json();
+                    setUserName(responseData.message);
+                } else {
+                    console.error('Username fetching failed');
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        fetchUserName(); 
+    }, []);
 
 
     return (
@@ -53,7 +81,7 @@ export function Profile() {
                         className="border border-gray-900 p-0.5"
                         src={maleProfile}
                     />
-                    <div className='font-main font-semibold'>Hi, John!</div>
+                    <div className='font-main font-semibold'>Hi, {userName}!</div>
                     <ChevronDownIcon
                         strokeWidth={2.5}
                         className={`h-3 w-3 transition-transform ${
