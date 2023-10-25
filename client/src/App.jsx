@@ -6,6 +6,7 @@ import { Login } from './components/signup/Login'
 import { useOutlet } from 'react-router-dom'
 import { Welcome } from './components/Welcome'
 import StarsCanvas from './components/signup/StarsCanvas'
+import React from 'react'
 
 export const AppContext = createContext()
 
@@ -28,6 +29,7 @@ function App() {
   const outlet = useOutlet()
 
   return (
+    <React.StrictMode>
       <AppContext.Provider value = { { isMounted, setIsMounted, isAuth, setIsAuth, setIsNewUser, userId, setUserId, showAlert, setShowAlert }}>  
         { isAuth ? ( 
             <div className='flex h-full w-full min-h-screen'>
@@ -50,6 +52,7 @@ function App() {
           )
         }
       </AppContext.Provider>
+    </React.StrictMode>
   )
 }
 
