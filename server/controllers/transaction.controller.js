@@ -88,8 +88,46 @@ const getAllTransactionsByMonth = async (req, res) => {
     }
 };
 
+const getAllTransactionsByCategory = async (req, res) => {
+    try {
+        const { userId } = req.body;
+        // Retrieve all transactions for the given user and month (e.g., October)
+        const octTransactions = await Transaction.find({
+            userId: userId,
+            date: /Oct/i, // Use a case-insensitive regular expression to match 'Oct' in the date field
+        }, 'category amount');
+
+        if (octTransactions.length === 0) {
+            return res.status(200).json({ message: 'No transactions with "Oct" found' });
+        }
+
+        // Process the data to combine transactions by category
+        const aggregatedTransactions = {};
+        octTransactions.forEach(transaction => {
+            const category = transaction.category;
+
+            if (aggregatedTransactions[category]) {
+                aggregatedTransactions[category].totalAmount += transaction.amount;
+            } else {
+                aggregatedTransactions[category] = {
+                    category,
+                    totalAmount: transaction.amount
+                };
+            }
+        });
+        
+        const result = Object.values(aggregatedTransactions);
+
+        return res.status(200).json({ message: result });
+    } catch (error) {
+        console.error(error); // Log the error for debugging
+        res.status(500).json({ message: error.message });
+    }
+};
+
 export {
     createTransaction,
     getAllTransactions,
-    getAllTransactionsByMonth
+    getAllTransactionsByMonth,
+    getAllTransactionsByCategory,
 }
