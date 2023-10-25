@@ -28,7 +28,7 @@ export function DailyExpenseFlow() {
                     const updatedChartData = responseData.message.map((item) => {
                         // Extract the day and amount from the response data
                         const day = item.date.split(' ')[1] + ' ' + item.date.split(' ')[2];
-                        const Expenditure = item.amount;
+                        const Expenditure = item.totalAmount;
                     
                         return { day, Expenditure };
                     });
