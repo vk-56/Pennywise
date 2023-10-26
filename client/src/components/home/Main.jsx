@@ -1,6 +1,4 @@
 import { Card, Typography } from "@material-tailwind/react"
-
-import { ExpensesChart } from "./ExpensesChart"
 import { DailyChallenges } from "./DailyChallenges"
 import { TransactionList } from "./TransactionList"
 import { AddExpense } from "./AddExpense"

@@ -1,5 +1,6 @@
 import User from '../mongodb/models/user.js';
 import Budget from '../mongodb/models/budget.js';
+import BudgetStats from '../mongodb/models/budgetStats.js';
 
 const getAllBudgets = async (req, res) => {
     try {   
@@ -26,7 +27,20 @@ const createBudget = async (req, res) => {
             maxAmount,
             userId
         })
+
+        const updatedBudget = await BudgetStats.findOneAndUpdate(
+            { userId: userId },
+            {   
+                $inc: {
+                    amountBudgeted: maxAmount,
+                    amountSpent: currentAmount,
+                    amountRemaining: maxAmount - currentAmount
+                }
+            },
+            { upsert: true, new: true }
+        )
         
+
         const budgetId = newBudget._id;
         res.status(200).json({ message: budgetId });
     } catch (error) {
