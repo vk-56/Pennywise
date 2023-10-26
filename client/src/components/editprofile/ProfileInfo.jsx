@@ -7,22 +7,65 @@ import {
     DialogFooter,
     Input
 } from "@material-tailwind/react"
-
+import * as  yup  from 'yup'
+import { useForm } from "react-hook-form"
+import { yupResolver } from "@hookform/resolvers/yup"
 /* Display User Profile Info */
 
 export function ProfileInfo() {
     const [open, setOpen] = React.useState(false);
 
     const handleOpen = () => setOpen(!open);
+
+     /* Schema of form */
+     const schema = yup.object().shape({
+        name: yup.string().required(),
+        age: yup.string().required(),
+        email: yup.string().required(),
+        contact: yup.string().required(),
+        location: yup.string().required()
+    });
+
+      /* Functions from useForm hook */
+    const { register, handleSubmit, setValue, formState: {errors} } = useForm({
+         mode: "onChange",
+        resolver: yupResolver(schema),
+    })
+
+    const onSubmit = async(data) => {
+        try {
+            const response = await fetch('http://localhost:8080/api/v1/users/updateProfile', {
+        method: 'POST',
+        headers: { 'Content-Type' : 'application/json'},
+        body: JSON.stringify({
+          userName: data.userName,
+          age: data.age,
+          email: data.email,
+          contact: data.contact,
+          location: data.contact,
+        })
+      });
+
+      if (response.status === 200) {
+        const responseData = await response.json();
+        console.log(responseData.message);
+      } else {
+        console.error('User signup failed');
+      }
+        }catch(error){
+            console.log(error);
+        }
+    }
     return (
-        <form class="flex flex-col items-center gap-3 m-20 h-full">
+        <form class="flex flex-col items-center gap-3 m-20 h-full" onSubmit={handleSubmit(onSubmit)}>
             <div className="flex w-72 flex-col items-center gap-6 justify-center">
-                <Input size="xl" color="white" label="Name " />
-                <Input size="lg" color="white" label="Age" />
-                <Input size="lg" color="white" label="Email" />
-                <Input size="lg" color="white" label="Contact Number" />
+                <Input size="xl" color="white" label="Name " {...register("userName")} />
+                <Input size="lg" color="white" label="Age" {...register("age")}/>
+                <Input size="lg" color="white" label="Email" {...register("email")}/>
+                <Input size="lg" color="white" label="Contact Number" {...register("contact")}/>
+                <Input size="lg" color="white" label="location" {...register("location")}/>
                 <div class ="flex justify-center">
-                    <Button onClick={handleOpen}>Confirm</Button>
+                    <Button type="submit">Confirm</Button>
                 </div>
                 <Dialog open={open} handler={handleOpen}>
                     <div className="flex items-center justify-between">

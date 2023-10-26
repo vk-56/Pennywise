@@ -7,6 +7,7 @@ import {
     getUserNameById,
     getContactById,
     getLocationById,
+    updateUserDetailsById
 } from '../controllers/user.controller.js';
 
 const router = express.Router();
@@ -16,5 +17,6 @@ router.route('/signup').post(createUser);
 router.route('/getUsername').post(getUserNameById);
 router.route('/getLocation').post(getLocationById);
 router.route('/getContact').post(getContactById);
+router.route('/updateProfile').post(updateUserDetailsById);
 
 export default router;

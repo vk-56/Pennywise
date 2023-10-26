@@ -97,10 +97,33 @@ const createUser = async (req, res) => {
     }
 };
 
+const updateUserDetailsById = async (req, res) => {
+    try {   
+        const { userId , age , email , location , contact } = req.body;
+        const user = await User.findOneAndUpdate(
+            { _id: userId },
+            { 
+                age: age,
+                email: email,
+                location: location,
+                contact: contact,
+            },
+            { upsert: true, new: true },
+        );
+        
+    } catch (error) {
+        console.error(error); // Log the error for debugging
+        res.status(500).json({ message: error.message })  
+    }
+};
+
+
+
 export {
     getUserInfo,
     createUser,
     getUserNameById,
     getContactById,
-    getLocationById
+    getLocationById,
+    updateUserDetailsById
 }
