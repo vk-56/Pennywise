@@ -58,7 +58,10 @@ const getAllTransactionsByMonth = async (req, res) => {
         // Retrieve all transactions for the given user and month (e.g., October)
         const octTransactions = await Transaction.find({
             userId: userId,
-            date: /Oct/i, // Use a case-insensitive regular expression to match 'Oct' in the date field
+            date: {
+                $gte: new Date('2023-10-01'), // Start of October
+                $lte: new Date('2023-10-31'), // End of October
+            }
         }, 'date amount');
 
         if (octTransactions.length === 0) {
@@ -94,7 +97,10 @@ const getAllTransactionsByCategory = async (req, res) => {
         // Retrieve all transactions for the given user and month (e.g., October)
         const octTransactions = await Transaction.find({
             userId: userId,
-            date: /Oct/i, // Use a case-insensitive regular expression to match 'Oct' in the date field
+            date: {
+                $gte: new Date('2023-10-01'), // Start of October
+                $lte: new Date('2023-10-31'), // End of October
+            }
         }, 'category amount');
 
         if (octTransactions.length === 0) {

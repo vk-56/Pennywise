@@ -55,7 +55,7 @@ export function TransactionList() {
                 </tr>
             </thead>
             <tbody>
-                {userTransacArray.map(
+                {Array.isArray(userTransacArray) ? userTransacArray.map(
                     (
                         {
                             category,
@@ -91,7 +91,7 @@ export function TransactionList() {
                             </tr>
                         )
                     }
-                )}
+                ) : null}
             </tbody>
           </table>
     )

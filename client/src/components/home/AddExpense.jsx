@@ -34,7 +34,7 @@ export function AddExpense() {
                     type: data.type,
                     category: data.category,
                     amount: data.amount,
-                    date: new Date().toDateString(),
+                    date: new Date(),
                     userId: userId
                 })
             });

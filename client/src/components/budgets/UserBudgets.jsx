@@ -10,7 +10,7 @@ export function UserBudgets() {
     useEffect( () => {
         async function fetchUserBudgets() {
             try {
-                const response = await fetch('http://localhost:8080/api/v1/budgets/getBudget', 
+                const delResponse = await fetch('http://localhost:8080/api/v1/budgets/deleteBudget', 
                     {
                     method: 'POST',
                     headers: { 'Content-Type' : 'application/json'},
@@ -19,8 +19,24 @@ export function UserBudgets() {
                     })
                 })
             
-                if (response.status === 200) {
-                    const responseData = await response.json();
+                if (delResponse.status === 200) {
+                    const responseData = await delResponse.json();
+                    console.log(responseData);
+                } else {
+                    console.error('Budget fetching failed');
+                }
+                
+                const readResponse = await fetch('http://localhost:8080/api/v1/budgets/getBudget', 
+                    {
+                    method: 'POST',
+                    headers: { 'Content-Type' : 'application/json'},
+                    body: JSON.stringify({
+                        userId: userId
+                    })
+                })
+            
+                if (readResponse.status === 200) {
+                    const responseData = await readResponse.json();
                     setUserBudgetsArray(responseData.message);
                     console.log(userBudgetsArray);
                 } else {

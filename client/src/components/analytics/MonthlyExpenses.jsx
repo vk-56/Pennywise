@@ -10,7 +10,7 @@ import { AppContext } from "../../App";
 const valueFormatter = (number) => `Rs. ${number}`
 
 export function MonthlyExpenses() {
-    const colors = ["teal", "lime", "pink", "purple", "indigo", "blue", "cyan", "yellow", "green", "amber", "orange", "red"]
+    const colors = ["teal", "lime", "purple", "indigo", "blue", "cyan", "yellow", "green", "amber", "orange", "red"]
     const tableHeadings = ["Category","Amount"];
     const { userId } = useContext(AppContext);
     const [ chartData, setChartData ] = useState();
@@ -36,7 +36,7 @@ export function MonthlyExpenses() {
                     console.error('Oct transaction fetching failed');
                 }
 
-
+                const colorsArray = []
                 for (let i = 0; i < 3; i++) 
                 {
                     const randomIndex = Math.floor(Math.random() * colors.length);
