@@ -45,6 +45,9 @@ export function SimpleRegistrationForm() {
           email: data.email,
           password: data.password,
           avatar: '',
+          age:'',
+          contact:'',
+          location:'',
           coinBalance: 0,
           
         })
