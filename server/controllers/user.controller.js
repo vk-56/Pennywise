@@ -39,13 +39,14 @@ const getUserInfo = async (req, res) => {
 };
 const createUser = async (req, res) => {
     try {
-        const { userName, email, password, avatar, age, coinBalance } = req.body;
+        const { userName, email, password, avatar, age, contact, coinBalance } = req.body;
         const newUser = await User.create({
             userName,
             email,
             password,
             avatar,
             age,
+            contact,
             coinBalance, 
             dailyChallenges: [],
             allBudgets: [],

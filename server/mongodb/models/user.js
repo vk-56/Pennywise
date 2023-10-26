@@ -6,6 +6,7 @@ const UserSchema = new mongoose.Schema({
     password: { type: String, required: false},
     avatar: { type: String, required: false},
     age: { type: Number , required: false},
+    contact: { type: String , required: false },
     coinBalance: { type: Number, required: false},
     dailyChallenges: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Challenge'}],
     allBudgets: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Budget'}],
