@@ -25,21 +25,19 @@ export function DailyExpenseFlow() {
             
                 if (response.status === 200) {
                     const responseData = await response.json();
-                    console.log(responseData.message)
                     // Create the chart data
                     const updatedChartData = responseData.message.map((item) => {
                         const date = new Date(item.date);
 
                         const options = {
-                        weekday: 'short', // Short weekday name (e.g., 'Wed')
-                        year: 'numeric',  // Numeric year (e.g., '2023')
-                        month: 'short',   // Short month name (e.g., 'Oct')
-                        day: '2-digit',   // Two-digit day of the month (e.g., '25')
+                            weekday: 'short', // Short weekday name
+                            year: 'numeric',  // Numeric year
+                            month: 'short',   // Short month name
+                            day: '2-digit',   // Two-digit day of the month
                         };
 
                         const formattedDate = date.toLocaleDateString(undefined, options);
-                        console.log(formattedDate);
-                        // Extract the day and amount from the response data
+                        // Extract the day and amount
                         const day = formattedDate.split(' ')[1] + ' ' + formattedDate.split(' ')[2];
                         const Expenditure = item.totalAmount;
                     
@@ -54,7 +52,6 @@ export function DailyExpenseFlow() {
                     });
 
                     setChartData(updatedChartData);
-                    console.log(chartData);
                     const colorsArray = [];
                     const randomIndex = Math.floor(Math.random() * colors.length);
                     colorsArray.push(colors[randomIndex]);
@@ -69,7 +66,6 @@ export function DailyExpenseFlow() {
         fetchDailyTransactions();
     }, []);
 
-    console.log(randomColors)
     if (!chartData) return null;
     
     return(

@@ -1,6 +1,7 @@
 import Transaction from '../mongodb/models/transaction.js';
 import Budget from '../mongodb/models/budget.js';
 
+/* Create a new transaction document */
 const createTransaction = async (req, res) => {
     try {
         const { type, category, amount, date, userId } = req.body;
@@ -12,7 +13,7 @@ const createTransaction = async (req, res) => {
             userId
         })
         const transactionId = newTransaction._id;
-        /* update budget current amount based on user id and category of transaction */
+        /* Update budget's amount based on user id and category of transaction */
         const updateResult = await Budget.updateOne({
             "category": category,
             "userId": userId,
@@ -24,17 +25,16 @@ const createTransaction = async (req, res) => {
         console.log('Update result:', updateResult);
         res.status(200).json({ message: transactionId });
     } catch (error) {
-        console.error(error); // Log the error for debugging
+        console.error(error);
         res.status(500).json({ message: error.message })   
     }
 };
 
+/* Fetch 3 recent transactions of the user */
 const getAllTransactions = async (req, res) => {
     try {   
         const { userId } = req.body;
-        const transactions = await Transaction.find({ userId: userId })
-            .sort({ date: -1 })  // Sort by date in descending order (most recent first)
-            .limit(3);           // Limit the results to 3 transactions
+        const transactions = await Transaction.find({ userId: userId }).sort({ date: -1 }).limit(3);           
 
         if (transactions.length > 0) {
             // Convert date strings to date objects
@@ -52,10 +52,10 @@ const getAllTransactions = async (req, res) => {
     }
 };
 
+/* Retrieve all transactions for the given user and month (e.g., October) */
 const getAllTransactionsByMonth = async (req, res) => {
     try {
         const { userId } = req.body;
-        // Retrieve all transactions for the given user and month (e.g., October)
         const octTransactions = await Transaction.find({
             userId: userId,
             date: {
@@ -86,15 +86,15 @@ const getAllTransactionsByMonth = async (req, res) => {
 
         return res.status(200).json({ message: result });
     } catch (error) {
-        console.error(error); // Log the error for debugging
+        console.error(error);
         res.status(500).json({ message: error.message });
     }
 };
-
+/* Retrieve all transactions for the given month (e.g., October) category wise */
 const getAllTransactionsByCategory = async (req, res) => {
     try {
         const { userId } = req.body;
-        // Retrieve all transactions for the given user and month (e.g., October)
+        
         const octTransactions = await Transaction.find({
             userId: userId,
             date: {
@@ -126,7 +126,7 @@ const getAllTransactionsByCategory = async (req, res) => {
 
         return res.status(200).json({ message: result });
     } catch (error) {
-        console.error(error); // Log the error for debugging
+        console.error(error);
         res.status(500).json({ message: error.message });
     }
 };

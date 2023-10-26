@@ -20,7 +20,7 @@ export function ProfileInfo() {
      /* Schema of form */
      const schema = yup.object().shape({
         name: yup.string().required(),
-        age: yup.string().required(),
+        age: yup.number().required(),
         email: yup.string().required(),
         contact: yup.string().required(),
         location: yup.string().required()

@@ -38,7 +38,6 @@ export function AddBudgets() {
                     userId: userId
                 })
             });
-            console.log('Budget creation done')
             if (response.status === 200) {
                 const responseData = await response.json();
                 console.log(responseData.message);
