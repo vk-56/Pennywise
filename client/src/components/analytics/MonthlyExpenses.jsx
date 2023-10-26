@@ -2,9 +2,6 @@ import { DonutChart, Legend } from "@tremor/react"
 import { Typography } from "@material-tailwind/react"
 import { useState, useEffect, useContext } from 'react'
 import { AppContext } from "../../App";
-/* Use the following colors: pink, purple, indigo, blue, cyan, teal, yellow, lime, green
-    amber, orange, red and gray
-*/
 
 /* Formatting actual value for displaying in chart tooltip */
 const valueFormatter = (number) => `Rs. ${number}`

@@ -1,5 +1,4 @@
 import User from '../mongodb/models/user.js';
-import Budget from '../mongodb/models/budget.js';
 
 const getUserNameById = async (req, res) => {
     try {   
