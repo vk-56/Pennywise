@@ -18,6 +18,40 @@ const getUserNameById = async (req, res) => {
     }
 };
 
+const getContactById = async (req, res) => {
+    try {   
+        const { userId } = req.body;
+        const user = await User.findOne({
+            _id: userId
+        });
+        if(user) 
+            return res.status(200).json( { message: user.contact } ) ;
+        else
+            return res.status(500).json( {message: 'User not found'} )
+        
+    } catch (error) {
+        console.error(error); // Log the error for debugging
+        res.status(500).json({ message: error.message })  
+    }
+};
+
+const getLocationById = async (req, res) => {
+    try {   
+        const { userId } = req.body;
+        const user = await User.findOne({
+            _id: userId
+        });
+        if(user) 
+            return res.status(200).json( { message: user.location } ) ;
+        else
+            return res.status(500).json( {message: 'User not found'} )
+        
+    } catch (error) {
+        console.error(error); // Log the error for debugging
+        res.status(500).json({ message: error.message })  
+    }
+};
+
 const getUserInfo = async (req, res) => {
     try {   
         const { email, password } = req.body;
@@ -39,7 +73,7 @@ const getUserInfo = async (req, res) => {
 };
 const createUser = async (req, res) => {
     try {
-        const { userName, email, password, avatar, age, contact, coinBalance } = req.body;
+        const { userName, email, password, avatar, age, contact, location, coinBalance } = req.body;
         const newUser = await User.create({
             userName,
             email,
@@ -47,6 +81,7 @@ const createUser = async (req, res) => {
             avatar,
             age,
             contact,
+            location,
             coinBalance, 
             dailyChallenges: [],
             allBudgets: [],
@@ -65,5 +100,7 @@ const createUser = async (req, res) => {
 export {
     getUserInfo,
     createUser,
-    getUserNameById
+    getUserNameById,
+    getContactById,
+    getLocationById
 }
