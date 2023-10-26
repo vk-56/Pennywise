@@ -35,12 +35,23 @@ const createBudget = async (req, res) => {
     }
 };
 
-const updateBudget = async (req, res) => {};
-const deleteBudget = async (req, res) => {};
+const deleteBudget = async (req, res) => {
+    try {
+        const { userId } = req.body;
+        const deletedBudget = await Budget.deleteMany({
+            userId: userId,
+            $where : "this.currentAmount > this.maxAmount"
+        })
+        
+        res.status(200).json({ message: deletedBudget });
+    } catch (error) {
+        console.error(error); // Log the error for debugging
+        res.status(500).json({ message: error.message })   
+    }  
+};
 
 export {
     getAllBudgets,
     createBudget,
-    updateBudget,
     deleteBudget
 }

@@ -6,8 +6,10 @@ import { AppContext } from "../../App"
 const valueFormatter = (number) => `Rs. ${number}`
 
 export function DailyExpenseFlow() {
+    const colors = ["teal", "lime", "purple", "indigo", "blue", "cyan", "yellow", "green", "amber", "orange", "red"]
     const { userId } = useContext(AppContext);
     const [chartData, setChartData] = useState();
+    const [ randomColors, setRandomColors ] = useState([]);
 
     useEffect( () => {
         async function fetchDailyTransactions() {
@@ -26,8 +28,19 @@ export function DailyExpenseFlow() {
                     console.log(responseData.message)
                     // Create the chart data
                     const updatedChartData = responseData.message.map((item) => {
+                        const date = new Date(item.date);
+
+                        const options = {
+                        weekday: 'short', // Short weekday name (e.g., 'Wed')
+                        year: 'numeric',  // Numeric year (e.g., '2023')
+                        month: 'short',   // Short month name (e.g., 'Oct')
+                        day: '2-digit',   // Two-digit day of the month (e.g., '25')
+                        };
+
+                        const formattedDate = date.toLocaleDateString(undefined, options);
+                        console.log(formattedDate);
                         // Extract the day and amount from the response data
-                        const day = item.date.split(' ')[1] + ' ' + item.date.split(' ')[2];
+                        const day = formattedDate.split(' ')[1] + ' ' + formattedDate.split(' ')[2];
                         const Expenditure = item.totalAmount;
                     
                         return { day, Expenditure };
@@ -42,6 +55,10 @@ export function DailyExpenseFlow() {
 
                     setChartData(updatedChartData);
                     console.log(chartData);
+                    const colorsArray = [];
+                    const randomIndex = Math.floor(Math.random() * colors.length);
+                    colorsArray.push(colors[randomIndex]);
+                    setRandomColors(colorsArray);
                 } else {
                     console.error('Oct transaction fetching failed');
                 }
@@ -52,6 +69,7 @@ export function DailyExpenseFlow() {
         fetchDailyTransactions();
     }, []);
 
+    console.log(randomColors)
     if (!chartData) return null;
     
     return(
@@ -62,7 +80,7 @@ export function DailyExpenseFlow() {
             data={chartData}
             index="day"
             categories={["Expenditure"]}
-            colors={["amber"]}
+            colors={randomColors}
             valueFormatter={valueFormatter}
             yAxisWidth={60}
             curveType="linear"

@@ -4,7 +4,6 @@ import express from 'express';
 import {
     getAllBudgets,
     createBudget,
-    updateBudget,
     deleteBudget
 } from '../controllers/budget.controller.js';
 
@@ -12,8 +11,6 @@ const router = express.Router();
 
 router.route('/createBudget').post(createBudget);
 router.route('/getBudget').post(getAllBudgets);
-
-router.route('/').patch(updateBudget);
-router.route('/').delete(deleteBudget);
+router.route('/deleteBudget').post(deleteBudget);
 
 export default router;
