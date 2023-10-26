@@ -14,9 +14,9 @@ export function EditProfile() {
                 <div class='inp-field'>
                     <ProfileInfo />
                 </div>
-                <div class ="flex justify-center">
+                {/* <div class ="flex justify-center">
                     <ButtonCNF />
-                </div>
+                </div> */}
             </div>
         </main>
     )
