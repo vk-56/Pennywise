@@ -56,15 +56,16 @@ const deleteBudget = async (req, res) => {
         /* Delete budgets that have exceeded their amounts */
         const deletedBudget = await Budget.deleteMany({
             userId: userId,
-            $where : "this.currentAmount > this.maxAmount"
-        })
+            $expr: { $gt: ["$currentAmount", "$maxAmount"] }
+        });
         
         res.status(200).json({ message: deletedBudget });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: error.message })   
-    }  
+        res.status(500).json({ message: error.message });
+    }
 };
+
 
 export {
     getAllBudgets,

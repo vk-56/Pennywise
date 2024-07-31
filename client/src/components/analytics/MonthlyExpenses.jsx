@@ -10,13 +10,13 @@ export function MonthlyExpenses() {
     const colors = ["teal", "lime", "purple", "indigo", "blue", "cyan", "yellow", "green", "amber", "orange", "red"]
     const tableHeadings = ["Category","Amount"];
     const { userId } = useContext(AppContext);
-    const [ chartData, setChartData ] = useState();
+    const [ chartData, setChartData ] = useState([]);
     const [ randomColors, setRandomColors ] = useState();
 
     useEffect( () => {
         async function fetchCategoryTransactions() {
             try {
-                const response = await fetch('http://localhost:8080/api/v1/transactions/getTransactionCategories', 
+                const response = await fetch('http://localhost:4000/api/v1/transactions/getTransactionCategories', 
                     {
                     method: 'POST',
                     headers: { 'Content-Type' : 'application/json'},
@@ -29,6 +29,7 @@ export function MonthlyExpenses() {
                     const responseData = await response.json();
                     console.log(responseData.message);
                     setChartData(responseData.message);
+                    console.log(chartData);
                 } else {
                     console.error('Oct transaction fetching failed');
                 }

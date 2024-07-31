@@ -10,7 +10,7 @@ export function TransactionList() {
     useEffect( () => {
         async function fetchUserTransactions() {
             try {
-                const response = await fetch('http://localhost:8080/api/v1/transactions/getTransaction', 
+                const response = await fetch('http://localhost:4000/api/v1/transactions/getTransaction', 
                     {
                     method: 'POST',
                     headers: { 'Content-Type' : 'application/json'},

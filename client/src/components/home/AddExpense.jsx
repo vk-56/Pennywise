@@ -27,7 +27,7 @@ export function AddExpense() {
     /* Adding submitted budget to database */
     const onSubmit = async (data) => {
         try {
-            const response = await fetch('http://localhost:8080/api/v1/transactions/createTransaction', {
+            const response = await fetch('http://localhost:4000/api/v1/transactions/createTransaction', {
                 method: 'POST',
                 headers: { 'Content-Type' : 'application/json'},
                 body: JSON.stringify({

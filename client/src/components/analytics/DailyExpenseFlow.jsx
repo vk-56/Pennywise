@@ -14,7 +14,7 @@ export function DailyExpenseFlow() {
     useEffect( () => {
         async function fetchDailyTransactions() {
             try {
-                const response = await fetch('http://localhost:8080/api/v1/transactions/getTransactionMonthly', 
+                const response = await fetch('http://localhost:4000/api/v1/transactions/getTransactionMonthly', 
                     {
                     method: 'POST',
                     headers: { 'Content-Type' : 'application/json'},

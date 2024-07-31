@@ -8,7 +8,7 @@ export function Welcome() {
     useEffect( () => {
         async function fetchUserName() {
             try {
-                const response = await fetch('http://localhost:8080/api/v1/users/getUsername', 
+                const response = await fetch('http://localhost:4000/api/v1/users/getUsername', 
                     {
                     method: 'POST',
                     headers: { 'Content-Type' : 'application/json'},

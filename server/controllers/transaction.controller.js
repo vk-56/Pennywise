@@ -56,60 +56,89 @@ const getAllTransactions = async (req, res) => {
 const getAllTransactionsByMonth = async (req, res) => {
     try {
         const { userId } = req.body;
-        const octTransactions = await Transaction.find({
+
+        // Define the start and end dates for July
+        const startDate = new Date('2024-07-01T00:00:00Z'); // Start of July
+        const endDate = new Date('2024-07-31T23:59:59Z'); // End of July
+
+        console.log('Start Date:', startDate.toISOString());
+        console.log('End Date:', endDate.toISOString());
+
+        // Fetch transactions within the specified date range
+        const transactions = await Transaction.find({
             userId: userId,
             date: {
-                $gte: new Date('2023-10-01'), // Start of October
-                $lte: new Date('2023-10-31'), // End of October
+                $gte: startDate,
+                $lte: endDate,
             }
         }, 'date amount');
 
-        if (octTransactions.length === 0) {
-            return res.status(200).json({ message: 'No transactions with "Oct" found' });
+        console.log('Fetched Transactions:', transactions);
+
+        if (transactions.length === 0) {
+            return res.status(200).json({ message: 'No transactions found for July' });
         }
 
-        // Process the data to combine transactions by date
+        // Aggregate transactions by date
         const aggregatedTransactions = {};
-        octTransactions.forEach(transaction => {
-            const date = transaction.date;
+        transactions.forEach(transaction => {
+            // Check if date is a Date object
+            if (!(transaction.date instanceof Date)) {
+                console.error('Date field is not a Date object:', transaction.date);
+                return;
+            }
 
-            if (aggregatedTransactions[date]) {
-                aggregatedTransactions[date].totalAmount += transaction.amount;
+            // Format the date to YYYY-MM-DD
+            const formattedDate = transaction.date.toISOString().split('T')[0];
+            if (aggregatedTransactions[formattedDate]) {
+                aggregatedTransactions[formattedDate].totalAmount += transaction.amount;
             } else {
-                aggregatedTransactions[date] = {
-                    date,
+                aggregatedTransactions[formattedDate] = {
+                    date: formattedDate,
                     totalAmount: transaction.amount
                 };
             }
         });
+
+        console.log('Aggregated Transactions:', aggregatedTransactions);
+
         const result = Object.values(aggregatedTransactions);
 
         return res.status(200).json({ message: result });
     } catch (error) {
-        console.error(error);
+        console.error('Error fetching transactions:', error);
         res.status(500).json({ message: error.message });
     }
 };
+
+
 /* Retrieve all transactions for the given month (e.g., October) category wise */
 const getAllTransactionsByCategory = async (req, res) => {
     try {
         const { userId } = req.body;
-        
-        const octTransactions = await Transaction.find({
+
+        // Define the start and end dates for July
+        const startDate = new Date('2024-07-01T00:00:00Z'); // Start of July
+        const endDate = new Date('2024-07-31T23:59:59Z'); // End of July
+
+        console.log('Start Date:', startDate.toISOString());
+        console.log('End Date:', endDate.toISOString());
+
+        const transactions = await Transaction.find({
             userId: userId,
             date: {
-                $gte: new Date('2023-10-01'), // Start of October
-                $lte: new Date('2023-10-31'), // End of October
+                $gte: startDate, // Start of October
+                $lte: endDate, // End of October
             }
         }, 'category amount');
 
-        if (octTransactions.length === 0) {
-            return res.status(200).json({ message: 'No transactions with "Oct" found' });
+        if (transactions.length === 0) {
+            return res.status(200).json({ message: 'No transactions with "July" found' });
         }
 
         // Process the data to combine transactions by category
         const aggregatedTransactions = {};
-        octTransactions.forEach(transaction => {
+        transactions.forEach(transaction => {
             const category = transaction.category;
 
             if (aggregatedTransactions[category]) {

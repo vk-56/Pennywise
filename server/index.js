@@ -14,7 +14,9 @@ dotenv.config();
 
 /* Adding middleware */
 const app = express();
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:5173'
+}));
 app.use(express.json({ limit: '50mb'}));
 
 /* Defining routes */
@@ -29,8 +31,8 @@ const startServer = async () => {
     try {
         /* Connect to database */
         connectDB(process.env.MONGODB_URL);
-        /* Listen on port 8080 */
-        app.listen(8080, () => console.log('Server started on port http://localhost:8080'));
+        /* Listen on port 3000 */
+        app.listen(4000, () => console.log('Server started on port http://localhost:4000'));
     }
     catch (error) {
         console.log(error);

@@ -34,7 +34,7 @@ export function ProfileInfo() {
 
     const onSubmit = async(data) => {
         try {
-            const response = await fetch('http://localhost:8080/api/v1/users/updateProfile', {
+            const response = await fetch('http://localhost:4000/api/v1/users/updateProfile', {
         method: 'POST',
         headers: { 'Content-Type' : 'application/json'},
         body: JSON.stringify({

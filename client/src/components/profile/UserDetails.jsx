@@ -12,7 +12,7 @@ export function UserDetails() {
     useEffect( () => {
         async function fetchUserName() {
             try {
-                const response = await fetch('http://localhost:8080/api/v1/users/getUsername', 
+                const response = await fetch('http://localhost:4000/api/v1/users/getUsername', 
                     {
                     method: 'POST',
                     headers: { 'Content-Type' : 'application/json'},
@@ -33,7 +33,7 @@ export function UserDetails() {
         }
         async function fetchContact() {
             try {
-                const response = await fetch('http://localhost:8080/api/v1/users/getContact', 
+                const response = await fetch('http://localhost:4000/api/v1/users/getContact', 
                     {
                     method: 'POST',
                     headers: { 'Content-Type' : 'application/json'},
@@ -54,7 +54,7 @@ export function UserDetails() {
         }
         async function fetchLocation() {
             try {
-                const response = await fetch('http://localhost:8080/api/v1/users/getLocation', 
+                const response = await fetch('http://localhost:4000/api/v1/users/getLocation', 
                     {
                     method: 'POST',
                     headers: { 'Content-Type' : 'application/json'},

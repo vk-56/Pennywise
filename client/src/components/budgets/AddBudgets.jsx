@@ -27,7 +27,7 @@ export function AddBudgets() {
     /* Adding submitted budget to database */
     const onSubmit = async (data) => {
         try {
-            const response = await fetch('http://localhost:8080/api/v1/budgets/createBudget', {
+            const response = await fetch('http://localhost:4000/api/v1/budgets/createBudget', {
                 method: 'POST',
                 headers: { 'Content-Type' : 'application/json'},
                 body: JSON.stringify({
@@ -136,7 +136,7 @@ export function UserBudgets() {
     const { userId } = useContext(AppContext);
     const fetchUserBudgets =  async () => {
         try {
-            const response = await fetch('http://localhost:8080/api/v1/budgets/getBudget', 
+            const response = await fetch('http://localhost:4000/api/v1/budgets/getBudget', 
                 {
                 method: 'POST',
                 headers: { 'Content-Type' : 'application/json'},

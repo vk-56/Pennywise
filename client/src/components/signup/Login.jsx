@@ -31,7 +31,7 @@ export function Login() {
   /* Adding submitted data to database */
   const onSubmit = async (data) => {
     try {
-      const response = await fetch('http://localhost:8080/api/v1/users/login', 
+      const response = await fetch('http://localhost:4000/api/v1/users/login', 
       {
         method: 'POST',
         headers: { 'Content-Type' : 'application/json'},
